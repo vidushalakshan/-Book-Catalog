@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BookDto;
+import com.example.demo.model.Book;
 import com.example.demo.repository.BookRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,11 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public void saveBook(BookDto bookDto) {
-
+        if (!repository.existsById(bookDto.getBook_id())){
+            repository.save(modelMapper.map(bookDto, Book.class));
+        }else {
+            throw new RuntimeException("Book Already Exist..");
+        }
     }
 
     @Override
