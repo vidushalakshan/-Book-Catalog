@@ -32,7 +32,11 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public void deleteBook(String bookID) {
-
+        if (repository.existsById(Integer.valueOf(bookID))){
+            repository.deleteById(Integer.valueOf(bookID));
+        }else {
+            throw new RuntimeException("Please cheack the Book ID.. No Such Book...!");
+        }
     }
 
     @Override
