@@ -13,11 +13,12 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService{
 
-    @Autowired
-    private BookRepository bookRepository;
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private BookRepository repository;
 
     @Override
     public void saveBook(BookDto bookDto) {
