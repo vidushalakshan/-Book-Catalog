@@ -4,6 +4,7 @@ import com.example.demo.dto.BookDto;
 import com.example.demo.model.Book;
 import com.example.demo.repository.BookRepository;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,8 +51,14 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public BookDto searchBook(String id) {
-        return null;
+        if (repository.existsById(Integer.valueOf(id))){
+            return modelMapper.map(repository.findById(Integer.valueOf(id)),new TypeToken<List<BookDto>>() {
+            }.getType());
+        }else {
+            throw new RuntimeException("No Book For "+ id + "..!");
+        }
     }
+
 
     @Override
     public List<BookDto> getAllBook() {
