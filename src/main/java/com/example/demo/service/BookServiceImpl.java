@@ -41,7 +41,11 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public void updateBook(BookDto bookDto) {
-
+        if (repository.existsById(bookDto.getBook_id())){
+            repository.save(modelMapper.map(bookDto, Book.class));
+        }else {
+            throw new RuntimeException("Please check the Book ID... No Such Book to Update..!");
+        }
     }
 
     @Override
