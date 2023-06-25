@@ -116,7 +116,7 @@
             data: data,
             success: function (response) {
                 if (response.code == 200) {
-                    alert("Successfully Admin Registered..");
+                    alert("Successfully Book Registered..");
                     loadAllBooks();
                 }
             },
@@ -169,14 +169,14 @@
         deleteBook();
     });
 
-    function deleteAdmin() {
-        let id = $("#exampleInputID").val();
+    function deleteBook() {
+        let id = $("#lblid").val();
         $.ajax({
-            url: baseUrlAdmin + `?id=${id}`, method: "DELETE", success: function (resp) {
+            url: baseUrlBook + `?id=${id}`, method: "DELETE", success: function (resp) {
                 if (resp.code == 200) {
-                    alert("Are You sure delete Admin ID :" + id);
-                    loadAllAdmin();
-                    clearAdminForm();
+                    alert("Are You sure delete Book ID :" + id);
+                    loadAllBooks();
+                 /*   clearAdminForm();*/
                 } else if (resp.code == 400) {
                     alert(resp.data);
                 }
