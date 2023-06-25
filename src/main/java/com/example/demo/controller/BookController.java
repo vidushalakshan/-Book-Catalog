@@ -26,6 +26,13 @@ public class BookController {
     @PostMapping
     public ResponseUtil saveBook(@RequestBody BookDto dto){
         service.saveBook(dto);
-        return new ResponseUtil(200, "Admin added Successfully", null);
+        return new ResponseUtil(200, "Book added Successfully", null);
     }
+
+    @DeleteMapping(params = {"id"},produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseUtil deleteBooks(@RequestParam String id) {
+        service.deleteBook(id);
+        return new ResponseUtil(200, "Book Delete Successfully", null);
+    }
+
 }
