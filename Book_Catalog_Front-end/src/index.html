@@ -27,7 +27,7 @@
                     <a aria-current="page" class="nav-link active text-white" href="#" id="linkHome">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a aria-current="page" class="nav-link active text-white" href="#" id="linkItem">Book</a>
+                    <a aria-current="page" class="nav-link active text-white" href="#" id="linkBook">Book</a>
                 </li>
             </ul>
         </div>
@@ -93,9 +93,26 @@
     </div>
 </section>
 
+<section id="home">
+    <img id="imageOne" style="width: 100%;height: 603px" src="assests/asd.png">
+</section>
+
 <script src="assests/bootstrap/js/bootstrap.min.js"></script>
 <script src="assests/jQuery/jquery-3.6.0.min.js"></script>
 <script>
+
+    $("#home").css("display", "");
+    $("#book").css("display", "none");
+
+    $("#linkHome").click(function () {
+        $("#home").css("display", "");
+        $("#book").css("display", "none");
+    });
+
+    $("#linkBook").click(function () {
+        $("#home").css("display", "none");
+        $("#book").css("display", "");
+    });
 
     var baseUrlBook = "http://localhost:8080/mySpringBootPos/api/book"
 
@@ -113,6 +130,7 @@
         $.ajax({
             url: baseUrlBook,
             method: "POST",
+            contentType: "application/json",
             data: data,
             success: function (response) {
                 if (response.code == 200) {
@@ -183,6 +201,36 @@
             }
         });
     }
+
+    $("#btnAdminUpdate").click(function () {
+        var adminOb = {
+            ids: $("#lblid").val(),
+            names: $("#lblName").val(),
+            author: $("#lblAuthor").val(),
+            year: $("#lblYear").val(),
+            price: $("#lblPrice").val(),
+        }
+
+        $.ajax({
+            url: baseUrlBook,
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(adminOb),
+            success: function (response) {
+                if (response.code == 200) {
+                    alert("SuccessFully Updated..")
+                    loadAllBooks()
+                    /*clearAdminForm();*/
+                }
+            },
+            error: function (ob) {
+                alert("SuccessFully Updated..")
+
+            }
+        });
+
+    });
+
 </script>
 
 </body>
