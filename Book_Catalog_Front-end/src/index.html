@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book_Catalog</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <script crossorigin="anonymous"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="../src/assests/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../src/assests/css/style/style.css" rel="stylesheet">
+    <link href="assests/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light color2 ">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold fs-2 text text-white" href="#">Book_Catalog</a>
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
+                data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-1 ">
+                <li class="nav-item">
+                    <a aria-current="page" class="nav-link active text-white" href="#" id="linkHome">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a aria-current="page" class="nav-link active text-white" href="#" id="linkItem">Book</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="container" id="book" >
+    <div class="row">
+        <div class="col-4"></div>
+        <form class="col-md-4" id="bookForm">
+            <div class="mb-3">
+                <label class="form-label fw-bold " for="lblid">Book ID</label>
+                <input aria-describedby="emailHelp" class="form-control" id="lblid" placeholder="001"
+                       type="text">
+                <p><small class="text-danger pl-1" id="lblids"></small></p>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="lblName">Book Name</label>
+                <input aria-describedby="emailHelp" class="form-control" id="lblName" placeholder="Madolduuwa"
+                       type="text">
+                <p><small class="text-danger pl-1" id="lblNames"></small></p>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="lblAuthor">Book Author</label>
+                <input aria-describedby="emailHelp" class="form-control" id="lblAuthor"
+                       placeholder="Martin" type="text">
+                <p><small class="text-danger pl-1" id="lblAuthors"></small></p>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="lblYear">Year Off Publication</label>
+                <input aria-describedby="emailHelp" class="form-control" id="lblYear" placeholder="22/03/2023"
+                       type="text">
+                <p><small class="text-danger pl-1" id="lblYears"></small></p>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="lblPrice">Price</label>
+                <input aria-describedby="emailHelp" class="form-control" id="lblPrice"
+                       placeholder="Martin" type="text">
+                <p><small class="text-danger pl-1" id="lblPrices"></small></p>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-outline-primary" id="btnBookSave" type="button">Save</button>
+                <button class="btn btn-outline-warning" id="btnBookDelete" type="button">Delete</button>
+                <button class="btn btn-outline-info" id="BookClear" type="button">Clear</button>
+            </div>
+        </form>
+    </div>
+    <br><br>
+    <div class="row col-md-12">
+        <table class="table">
+            <thead class="table-success">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Author</th>
+                <th scope="col">YearOffPublication</th>
+                <th scope="col">Price</th>
+            </tr>
+            </thead>
+            <tbody id="tblBook">
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script src="assests/bootstrap/js/bootstrap.min.js"></script>
+<script src="assests/jQuery/jquery-3.6.0.min.js"></script>
+<script>
+
+    var baseUrlBook = "http://localhost:8080/mySpringBootPos/api/book"
+
+    $("#btnBookSave").click(function () {
+        saveBook();
+        console.log("Work button..");
+    });
+
+    $("#btnAdminClear").click(function () {
+        clearBookForm();
+    });
+
+    function saveBook() {
+        var data = $("#bookForm").serialize();
+        $.ajax({
+            url: baseUrlBook,
+            method: "POST",
+            data: data,
+            success: function (response) {
+                if (response.code == 200) {
+                    alert("Successfully Admin Registered..");
+                    loadAllBooks();
+                }
+            },
+            error: function (ob) {
+                alert(ob.responseJSON.message);
+            }
+        });
+    }
+
+
+    function loadAllBooks() {
+        $("#tblBook").empty();
+        $.ajax({
+            url: baseUrlBook,
+            method: "GET",
+            success: function (response) {
+                for (const book of response.data) {
+                    let row = `<tr><td>${book.book_id}</td><td>${book.book_name}</td><td>${book.book_author}</td><td>${book.year_off_publication}</td><td>${book.book_price}</td></tr>`;
+                    $("#tblBook").append(row);
+                }
+                bindClickEventsBook();
+            },
+            error: function (ob) {
+                alert(ob.responseJSON.message);
+            }
+        });
+    }
+
+    //Bind click events to the table rows
+    function bindClickEventsBook() {
+        $("#tblBook>tr").click(function () {
+            //Get values from the selected row
+            let id = $(this).children().eq(0).text();
+            let name = $(this).children().eq(1).text();
+            let author = $(this).children().eq(2).text();
+            let year = $(this).children().eq(3).text();
+            let price = $(this).children().eq(4).text();
+
+            //Set values to the text-fields
+            $("#lblid").val(id);
+            $("#lblName").val(name);
+            $("#lblAuthor").val(author);
+            $("#lblYear").val(year);
+            $("#lblPrice").val(price);
+        });
+    }
+
+
+    $("#btnBookDelete").click(function () {
+        deleteBook();
+    });
+
+    function deleteAdmin() {
+        let id = $("#exampleInputID").val();
+        $.ajax({
+            url: baseUrlAdmin + `?id=${id}`, method: "DELETE", success: function (resp) {
+                if (resp.code == 200) {
+                    alert("Are You sure delete Admin ID :" + id);
+                    loadAllAdmin();
+                    clearAdminForm();
+                } else if (resp.code == 400) {
+                    alert(resp.data);
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -5,7 +5,6 @@ import com.example.demo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import util.ResponseUtil;
 
@@ -33,6 +32,11 @@ public class BookController {
     public ResponseUtil deleteBooks(@RequestParam String id) {
         service.deleteBook(id);
         return new ResponseUtil(200, "Book Delete Successfully", null);
+    }
+
+    @GetMapping(path = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseUtil searchBooks(@PathVariable String search) {
+        return new ResponseUtil(200, "OK", service.searchBook(search));
     }
 
 }
